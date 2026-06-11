@@ -1,16 +1,29 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { removeItem, addItem } from "../features/cart/CartSlice";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const CartItem = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const cartItems = useSelector((state) => state.cart.items);
 
   const totalAmount = cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
   );
+
+  const handleCheckout = () => {
+    alert(`Order placed successfully! Total: $${totalAmount}`);
+  };
+
+  const handleDecrease = (item) => {
+    if (item.quantity > 1) {
+      dispatch(removeItem(item.id));
+    } else {
+      dispatch(removeItem(item.id)); // removes item if quantity = 1
+    }
+  };
 
   return (
     <div className="cart-container">
@@ -29,7 +42,7 @@ const CartItem = () => {
 
               <p>Total: ${item.price * item.quantity}</p>
 
-              {/* Quantity Controls */}
+              {/* Increment */}
               <button
                 className="btn btn-primary"
                 onClick={() => dispatch(addItem(item))}
@@ -37,14 +50,15 @@ const CartItem = () => {
                 +
               </button>
 
+              {/* Decrement (prevents going negative) */}
               <button
                 className="btn btn-primary"
-                onClick={() => dispatch(removeItem(item.id))}
+                onClick={() => handleDecrease(item)}
               >
                 -
               </button>
 
-              {/* Delete Button */}
+              {/* Delete */}
               <button
                 className="btn btn-danger"
                 onClick={() => dispatch(removeItem(item.id))}
@@ -54,14 +68,14 @@ const CartItem = () => {
             </div>
           ))}
 
-          {/* Cart Total */}
           <h3>Total Amount: ${totalAmount}</h3>
 
-          {/* Buttons */}
-          <button className="btn btn-success">
+          {/* Checkout with alert */}
+          <button className="btn btn-success" onClick={handleCheckout}>
             Checkout
           </button>
 
+          {/* Proper navigation */}
           <Link to="/">
             <button className="btn btn-primary">
               Continue Shopping

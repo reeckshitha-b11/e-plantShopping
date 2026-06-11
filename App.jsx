@@ -9,13 +9,15 @@ import AboutUs from "./components/AboutUs";
 const App = () => {
   return (
     <Router>
-      <Navbar />
+      <div className="background-image">
+        <Navbar />
 
-      <Routes>
-        <Route path="/" element={<ProductList />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/about" element={<AboutUs />} />
-      </Routes>
+        <Routes>
+          <Route path="/" element={<ProductList />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/about" element={<AboutUs />} />
+        </Routes>
+      </div>
     </Router>
   );
 };
